@@ -1,5 +1,5 @@
-import { LngLat } from "./Basic"
+import { LngLatPoint } from "./Basic"
 
-export interface PointItemData {
-    pos: LngLat
+export class PointItemData {
+    pos: LngLatPoint
 }

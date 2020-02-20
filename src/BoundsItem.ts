@@ -1,142 +1,165 @@
 import { PointItem } from './PointItem'
+import { mUint32, mMaxUint32 } from './Raw'
+import { Point } from './Basic'
 
 export class BoundsItem {
-    x: number
-    y: number
-    width: number
-    height: number
+    x: mUint32
+    y: mUint32
+    width: mUint32
+    height: mUint32
 
-    constructor(x: number, y: number, width: number, height: number) {
+    constructor(x: mUint32, y: mUint32, width: mUint32, height: mUint32) {
         this.x = x
         this.y = y
         this.width = width
         this.height = height
     }
 
-    static getBoundsItemToExpand() {
-        return new BoundsItem(Number.MAX_VALUE, Number.MAX_VALUE, -1, -1);
+    static getBoundsItemToExpand(): BoundsItem {
+        return new BoundsItem(mMaxUint32, mMaxUint32, -1, -1)
     }
 
-    static boundsContainPoint(b: BoundsItem, p: PointItem) {
-        return b.x <= p.x && b.x + b.width >= p.x && b.y <= p.y && b.y + b.height >= p.y;
+    static boundsContainPoint(b: BoundsItem, p: PointItem): boolean {
+        return b.x <= p.x && b.x + b.width >= p.x && b.y <= p.y && b.y + b.height >= p.y
     }
 
-    static boundsContain(b1: BoundsItem, b2: BoundsItem) {
-        return b1.x <= b2.x && b1.x + b1.width >= b2.x + b2.width && b1.y <= b2.y && b1.y + b1.height >= b2.y + b2.height;
+    static boundsContain(b1: BoundsItem, b2: BoundsItem): boolean {
+        return b1.x <= b2.x && b1.x + b1.width >= b2.x + b2.width && b1.y <= b2.y && b1.y + b1.height >= b2.y + b2.height
     }
 
-    static boundsIntersect(b1: BoundsItem, b2: BoundsItem) {
-        return b1.x <= b2.x + b2.width && b2.x <= b1.x + b1.width && b1.y <= b2.y + b2.height && b2.y <= b1.y + b1.height;
+    static boundsIntersect(b1: BoundsItem, b2: BoundsItem): boolean {
+        return b1.x <= b2.x + b2.width && b2.x <= b1.x + b1.width && b1.y <= b2.y + b2.height && b2.y <= b1.y + b1.height
     }
 
-    intersectBounds(b: BoundsItem) {
-        return BoundsItem.boundsIntersect(this, b);
+    static getCenter(bounds: BoundsItem): Point {
+        return {
+            x: bounds.x + bounds.width / 2,
+            y: bounds.y + bounds.height / 2,
+        }
     }
 
-    containBounds(b: BoundsItem) {
-        return BoundsItem.boundsContain(this, b);
+    intersectBounds(b: BoundsItem): boolean {
+        return BoundsItem.boundsIntersect(this, b)
     }
 
-    containPoint(p: PointItem) {
-        return BoundsItem.boundsContainPoint(this, p);
+    containBounds(b: BoundsItem): boolean {
+        return BoundsItem.boundsContain(this, b)
     }
 
-    clone() {
-        return new BoundsItem(this.x, this.y, this.width, this.height);
+    containPoint(p: PointItem): boolean {
+        return BoundsItem.boundsContainPoint(this, p)
     }
 
-    isEmpty() {
-        return this.width < 0;
+    clone(): BoundsItem {
+        return new BoundsItem(this.x, this.y, this.width, this.height)
     }
 
-    getMin() {
+    isEmpty(): boolean {
+        return this.width < 0
+    }
+
+    getMin(): Point {
         return {
             x: this.x,
             y: this.y
         }
     }
 
-    getMax() {
+    getMax(): Point {
         return {
             x: this.x + this.width,
             y: this.y + this.height
         };
     }
 
-    expandByPoint(x, y) {
-        var minX, minY, maxX, maxY;
+    expandByPoint(x: mUint32, y: mUint32): void {
+        let minX: mUint32, minY: mUint32, maxX: mUint32, maxY: mUint32
         if (this.isEmpty()) {
-            minX = maxX = x;
-            minY = maxY = y;
+            minX = maxX = x
+            minY = maxY = y
         } else {
-            minX = this.x;
-            minY = this.y;
-            maxX = this.x + this.width;
-            maxY = this.y + this.height;
-            x < minX ? minX = x : x > maxX && (maxX = x);
-            y < minY ? minY = y : y > maxY && (maxY = y);
-        }
-        this.x = minX;
-        this.y = minY;
-        this.width = maxX - minX;
-        this.height = maxY - minY;
-    }
-
-    expandByBounds(bounds: BoundsItem) {
-        if (!bounds.isEmpty()) {
-            var minX = this.x, minY = this.y, maxX = this.x + this.width, maxY = this.y + this.height, newMinX = bounds.x, newMaxX = bounds.x + bounds.width, newMinY = bounds.y, newMaxY = bounds.y + bounds.height;
-            if (this.isEmpty()) {
-                minX = newMinX;
-                minY = newMinY;
-                maxX = newMaxX;
-                maxY = newMaxY;
+            minX = this.x
+            minY = this.y
+            maxX = this.x + this.width
+            maxY = this.y + this.height
+            if (x < minX) {
+                minX = x
             } else {
-                newMinX < minX && (minX = newMinX);
-                newMaxX > maxX && (maxX = newMaxX);
-                newMinY < minY && (minY = newMinY);
-                newMaxY > maxY && (maxY = newMaxY);
+                if (x > maxX) {
+                    maxX = x
+                }
             }
-            this.x = minX;
-            this.y = minY;
-            this.width = maxX - minX;
-            this.height = maxY - minY;
+            if (y < minY) {
+                minY = y
+            } else {
+                if (y > maxY) {
+                    maxY = y
+                }
+            }
         }
+        this.x = minX
+        this.y = minY
+        this.width = maxX - minX
+        this.height = maxY - minY
     }
 
-    getTopLeft() {
+    expandByBounds(bounds: BoundsItem): void {
+        if (bounds.isEmpty()) { return }
+
+        let minX = this.x,
+            minY = this.y,
+            maxX = this.x + this.width,
+            maxY = this.y + this.height,
+            newMinX = bounds.x,
+            newMaxX = bounds.x + bounds.width,
+            newMinY = bounds.y,
+            newMaxY = bounds.y + bounds.height
+        if (this.isEmpty()) {
+            minX = newMinX
+            minY = newMinY
+            maxX = newMaxX
+            maxY = newMaxY
+        } else {
+            if (newMinX < minX) { minX = newMinX }
+            if (newMaxX > maxX) { maxX = newMaxX }
+            if (newMinY < minY) { minY = newMinY }
+            if (newMaxY > maxY) { maxY = newMaxY }
+        }
+        this.x = minX
+        this.y = minY
+        this.width = maxX - minX
+        this.height = maxY - minY
+    }
+
+    getTopLeft(): Point {
         return {
             x: this.x,
             y: this.y
         }
     }
 
-    getTopRight() {
+    getTopRight(): Point {
         return {
             x: this.x + this.width,
             y: this.y
         }
     }
 
-    getBottomLeft() {
+    getBottomLeft(): Point {
         return {
             x: this.x,
             y: this.y + this.height
         }
     }
 
-    getBottomRight() {
+    getBottomRight(): Point {
         return {
             x: this.x + this.width,
             y: this.y + this.height
         }
     }
 
-    static getCenter(bounds: BoundsItem) {
-        return {
-            x: bounds.x + bounds.width / 2,
-            y: bounds.y + bounds.height / 2,
-        }
-    }
+
 }
 
 
