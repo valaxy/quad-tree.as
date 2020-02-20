@@ -4,9 +4,9 @@ import { mUint32 } from './Raw'
 import { BoundsItem } from './BoundsItem'
 
 export class QuadTree {
-    static Node = Node
+    private _root: Node
 
-    root: Node
+    get root(): Node { return this._root }
 
     static setMaxChildrenAndDepth(maxChildren: mUint32, maxDepth: mUint32): void {
         setupNode(maxDepth, maxChildren)
@@ -14,32 +14,25 @@ export class QuadTree {
 
     constructor(bounds: BoundsItem, maxDepth: mUint32, maxChildren: mUint32) {
         setupNode(maxDepth, maxChildren)
-        this.root = new Node(bounds, 0)
+        this._root = new Node(bounds, 0)
     }
 
-    insert(item: PointItem | PointItem[]): void {
-        if (item instanceof Array) {
-            for (let i = 0, len = item.length; i < len; i++) {
-                this.root.insert(item[i])
-            }
-        } else {
-            this.root.insert(item)
+    insert(items: PointItem[]): void {
+        for (let i = 0, len = items.length; i < len; i++) {
+            this._root.insert(items[i])
         }
     }
 
     clear(): void {
-        this.root.clear()
+        this._root.clear()
     }
 
     findContainerNode(item: BoundsItem): Node | null {
-        return this.root.findContainerNode(item)
+        return this._root.findContainerNode(item)
     }
 
     retrieve(item: PointItem): PointItem[] {
-        let out = this.root.retrieve(item).slice(0)
+        let out = this._root.retrieve(item).slice(0)
         return out
     }
 }
-
-
-QuadTree.prototype.root = null;
