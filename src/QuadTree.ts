@@ -31,8 +31,10 @@ export class QuadTree {
         return this._root.findContainerNode(item)
     }
 
-    retrieve(item: PointItem): PointItem[] {
-        let out = this._root.retrieve(item).slice(0)
-        return out
-    }
 }
+
+
+    // retrieve(item: PointItem): PointItem[] {
+    //     let out = this._root.retrieve(item).slice(0)
+    //     return out
+    // }

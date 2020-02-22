@@ -104,13 +104,7 @@ class Node {
         }
     }
 
-    retrieve(item: PointItem): PointItem[] {
-        if (this._subNodes.length) {
-            let index = this._findIndex(item)
-            return this._subNodes[index].retrieve(item);
-        }
-        return this._children;
-    }
+
 
     private _findIndex(item: PointItem): mInt32 {
         var b = this._bounds, left = !(item.x > b.x + b.width / 2)
@@ -185,3 +179,12 @@ class Node {
 
 
 export { Node }
+
+
+// retrieve(item: PointItem): PointItem[] {
+//     if (this._subNodes.length) {
+//         let index = this._findIndex(item)
+//         return this._subNodes[index].retrieve(item);
+//     }
+//     return this._children;
+// }
