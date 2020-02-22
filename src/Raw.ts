@@ -4,6 +4,7 @@
 // For TypeScript
 //==================================================
 // export type mFloat32 = number
+// export type mInt32 = number
 // export type mUint32 = number
 // export type mUnit16 = number
 // export type mUint8 = number
