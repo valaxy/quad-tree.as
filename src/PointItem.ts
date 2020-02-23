@@ -1,16 +1,16 @@
 import { PointItemData } from './PointItemData'
-import { mUint32 } from './Raw'
+import { XOrY } from './Basic'
 
 /**
  * 像素点
  */
 export class PointItem {
-    x: mUint32 // 像素单位
-    y: mUint32 // 像素单位
-    idx: mUint32 // 数据索引
+    x: XOrY // 像素单位
+    y: XOrY // 像素单位
+    idx: XOrY // 数据索引
     data: PointItemData
 
-    constructor(x: mUint32, y: mUint32, idx: mUint32, data: PointItemData) {
+    constructor(x: XOrY, y: XOrY, idx: XOrY, data: PointItemData) {
         this.x = x
         this.y = y
         this.idx = idx

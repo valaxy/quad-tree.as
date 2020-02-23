@@ -4,23 +4,26 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --require ts-node/register test/index.test.ts",
     "asbuild": "asc src/index.ts -b dist/untouched.wasm -t dist/untouched.wat --validate --sourceMap --debug"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/valaxy/quad-tree.as.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "valaxy",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/valaxy/quad-tree.as/issues"
   },
   "homepage": "https://github.com/valaxy/quad-tree.as#readme",
   "devDependencies": {
+    "@types/mocha": "^7.0.1",
     "@types/node": "^13.7.4",
     "assemblyscript": "^0.9.2",
-    "typescript": "^3.7.5"
+    "mocha": "^7.0.1",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.2"
   },
   "dependencies": {
     "@assemblyscript/loader": "^0.9.2"

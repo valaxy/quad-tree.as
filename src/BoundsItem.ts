@@ -1,14 +1,14 @@
 import { PointItem } from './PointItem'
-import { mUint32, mMaxUint32 } from './Raw'
-import { Point } from './Basic'
+import { mMaxFloat32 } from './Raw'
+import { Point, XOrY } from './Basic'
 
 export class BoundsItem {
-    x: mUint32
-    y: mUint32
-    width: mUint32
-    height: mUint32
+    x: XOrY
+    y: XOrY
+    width: XOrY
+    height: XOrY
 
-    constructor(x: mUint32, y: mUint32, width: mUint32, height: mUint32) {
+    constructor(x: XOrY, y: XOrY, width: XOrY, height: XOrY) {
         this.x = x
         this.y = y
         this.width = width
@@ -16,7 +16,7 @@ export class BoundsItem {
     }
 
     static getBoundsItemToExpand(): BoundsItem {
-        return new BoundsItem(mMaxUint32, mMaxUint32, -1, -1)
+        return new BoundsItem(mMaxFloat32, mMaxFloat32, -1, -1)
     }
 
     static boundsContainPoint(b: BoundsItem, p: PointItem): boolean {
@@ -32,10 +32,7 @@ export class BoundsItem {
     }
 
     static getCenter(bounds: BoundsItem): Point {
-        return {
-            x: bounds.x + bounds.width / 2,
-            y: bounds.y + bounds.height / 2,
-        }
+        return new Point(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2)
     }
 
     intersectBounds(b: BoundsItem): boolean {
@@ -59,21 +56,15 @@ export class BoundsItem {
     }
 
     getMin(): Point {
-        return {
-            x: this.x,
-            y: this.y
-        }
+        return new Point(this.x, this.y)
     }
 
     getMax(): Point {
-        return {
-            x: this.x + this.width,
-            y: this.y + this.height
-        };
+        return new Point(this.x + this.width, this.y + this.height)
     }
 
-    expandByPoint(x: mUint32, y: mUint32): void {
-        let minX: mUint32, minY: mUint32, maxX: mUint32, maxY: mUint32
+    expandByPoint(x: XOrY, y: XOrY): void {
+        let minX: XOrY, minY: XOrY, maxX: XOrY, maxY: XOrY
         if (this.isEmpty()) {
             minX = maxX = x
             minY = maxY = y
@@ -132,34 +123,20 @@ export class BoundsItem {
     }
 
     getTopLeft(): Point {
-        return {
-            x: this.x,
-            y: this.y
-        }
+        return new Point(this.x, this.y)
     }
 
     getTopRight(): Point {
-        return {
-            x: this.x + this.width,
-            y: this.y
-        }
+        return new Point(this.x + this.width, this.y)
     }
 
     getBottomLeft(): Point {
-        return {
-            x: this.x,
-            y: this.y + this.height
-        }
+        return new Point(this.x, this.y + this.height)
     }
 
     getBottomRight(): Point {
-        return {
-            x: this.x + this.width,
-            y: this.y + this.height
-        }
+        return new Point(this.x + this.width, this.y + this.height)
     }
-
-
 }
 
 
