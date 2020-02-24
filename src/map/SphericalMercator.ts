@@ -1,4 +1,4 @@
-import { LngLatPoint, PointPair } from '../Basic'
+import { Point, LngLatPoint } from '../Basic'
 import { mInt32, mFloat64 } from '../Raw'
 
 const earthDiameter: mFloat64 = 12756274
@@ -24,53 +24,53 @@ function getScale(level: mInt32): mInt32 {
     return scales[level]
 }
 
-function project(lnglat: LngLatPoint): PointPair {
-    let lat = Math.max(Math.min(maxLat, lnglat[1]), -maxLat)
-    let x = lnglat[0] * deg2rad, y = lat * deg2rad
+function project(lnglat: LngLatPoint): Point {
+    let lat = Math.max(Math.min(maxLat, lnglat.mapY), -maxLat)
+    let x = lnglat.mapX * deg2rad, y = lat * deg2rad
     y = Math.log(Math.tan(quadPI + y / 2))
-    return [x, y]
+    return new Point(x, y)
 }
 
 function toFixed6(n: mFloat64): mFloat64 {
     return Math.round(n * 1000000) / 1000000
 }
 
-function unproject(point: PointPair): LngLatPoint {
-    let lng = point[0] * rad2deg
-    let lat = (2 * Math.atan(Math.exp(point[1])) - Math.PI / 2) * rad2deg
-    return [toFixed6(lng), toFixed6(lat)]
+function unproject(point: Point): LngLatPoint {
+    let lng = point.x * rad2deg
+    let lat = (2 * Math.atan(Math.exp(point.y)) - Math.PI / 2) * rad2deg
+    return new LngLatPoint(toFixed6(lng), toFixed6(lat))
 }
 
 
 
-function transform(point: PointPair, scale: mInt32): PointPair {
+function transform(point: Point, scale: mInt32): Point {
     var a = half2PI, b = .5, c = -a, d = .5
-    return [scale * (a * point[0] + b), scale * (c * point[1] + d)]
+    return new Point(scale * (a * point.x + b), scale * (c * point.y + d))
 }
 
-function untransform(point: PointPair, scale: mInt32): PointPair {
+function untransform(point: Point, scale: mInt32): Point {
     var a = half2PI, b = .5, c = -a, d = .5;
-    return [(point[0] / scale - b) / a, (point[1] / scale - d) / c];
+    return new Point((point.x / scale - b) / a, (point.y / scale - d) / c)
 }
 
 
 
-function lngLatToPoint(lnglat: LngLatPoint, level: mInt32): PointPair {
+function lngLatToPoint(lnglat: LngLatPoint, level: mInt32): Point {
     let scale = getScale(level)
     let p = transform(project(lnglat), scale)
     return p
 }
 
-function pointToLngLat(point: PointPair, level: mInt32): LngLatPoint {
+function pointToLngLat(point: Point, level: mInt32): LngLatPoint {
     var scale = getScale(level), untransformedPoint = untransform(point, scale);
     return unproject(untransformedPoint);
 }
 
 
 
-function haversineDistance(point1: PointPair, point2: PointPair): mFloat64 {
-    let lat1 = point1[1] * deg2rad, lon1 = point1[0] * deg2rad,
-        lat2 = point2[1] * deg2rad, lon2 = point2[0] * deg2rad, dLat = lat2 - lat1,
+function haversineDistance(point1: Point, point2: Point): mFloat64 {
+    let lat1 = point1.y * deg2rad, lon1 = point1.x * deg2rad,
+        lat2 = point2.y * deg2rad, lon2 = point2.x * deg2rad, dLat = lat2 - lat1,
         dLon = lon2 - lon1, a = (1 - Math.cos(dLat) + (1 - Math.cos(dLon)) * Math.cos(lat1) * Math.cos(lat2)) / 2;
     return earthDiameter * Math.asin(Math.sqrt(a));
 }

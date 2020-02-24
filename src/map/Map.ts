@@ -3,8 +3,12 @@ import { BoundsItem } from '../BoundsItem'
 import { PointItemData } from '../PointItemData'
 import { PointItem } from '../PointItem'
 import { lngLatToPoint } from './SphericalMercator'
-import { LngLatPoint, PointPair } from '../Basic'
-import { mFloat32, mInt32 } from '../Raw'
+import { LngLatPoint, LngOrLat, Point } from '../Basic'
+import { mFloat32, mInt32, mFloat64 } from '../Raw'
+
+// declare function idof<T>(): mInt32
+
+// export const UINT32_ARRAY = idof<Array<mInt32>>()
 
 export class Map {
     private _quadTree: QuadTree | null = null
@@ -30,25 +34,32 @@ export class Map {
     }
 
 
-    buildQuadTree(data: PointItemData[]): void {
+    buildQuadTree(lngLatList: Array<LngOrLat>): void {
+        let len: mInt32 = lngLatList.length / 2
+        let points = new Array<PointItemData>(len)
+        for (let i = 0; i < len; i++) {
+            points[i] = new PointItemData(new LngLatPoint(lngLatList[i * 2], lngLatList[i * 2 + 1]))
+        }
         this._clearData()
         this.trigger("willBuildData")
-        this._buildDataItems(data)
+        this._buildDataItems(points)
         this._buildQuadTree()
         this.trigger("didBuildData")
     }
 
 
+    getDescendantsNum(): mInt32 {
+        return this.quadTree === null ? 0 : this.quadTree.root.getDescendantsNum()
+    }
+
     private _buildDataItems(data: PointItemData[]): void {
         let bounds = BoundsItem.getBoundsItemToExpand()
         for (let list = this._list, idx = 0, len = data.length; idx < len; idx++) {
             let point = data[idx]
-            let pos = point.pos
-            if (!pos) { throw new Error('getPosition should not return null') }
-            let px = this._getPixelOfMaxZoom(pos)
-            let item = new PointItem(px[0], px[1], idx, point) // 将业务数据挂载到PointItem上方便四叉树节点的聚合
+            let px = this._getPixelOfMaxZoom(point.pos)
+            let item = new PointItem(px.x, px.y, idx, point) // 将业务数据挂载到PointItem上方便四叉树节点的聚合
             list[idx] = item
-            bounds.expandByPoint(px[0], px[1])
+            bounds.expandByPoint(px.x, px.y)
         }
         this._bounds = bounds
     }
@@ -107,12 +118,11 @@ export class Map {
     }
 
 
-    private _getPixelOfMaxZoom(lngLat: LngLatPoint): PointPair {
+    private _getPixelOfMaxZoom(lngLat: LngLatPoint): Point {
         let maxZoom = this._maxZoom
         let pMx = lngLatToPoint(lngLat, maxZoom)
-        return [Math.round(pMx[0]), Math.round(pMx[1])]
+        return pMx
     }
-
     private _clearData(): void {
         this.trigger("willClearData")
         this._list = []

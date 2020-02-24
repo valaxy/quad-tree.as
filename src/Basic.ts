@@ -1,7 +1,7 @@
 import { mUint32, mFloat32, mFloat64 } from './Raw'
 
 
-// 坐标点
+// 像素坐标点
 export type XOrY = mFloat64
 export class Point {
     x: XOrY
@@ -12,34 +12,16 @@ export class Point {
         this.y = y
     }
 }
-export type PointPair = Array<XOrY>
 
 
 // 经度或纬度
 export type LngOrLat = mFloat64
-export type LngLatPoint = Array<LngOrLat>
+export class LngLatPoint {
+    mapX: LngOrLat
+    mapY: LngOrLat
 
-
-
-// // 像素坐标点
-// export class Point {
-//     x: mFloat32
-//     y: mFloat32
-
-//     constructor(x: mFloat32, y: mFloat32) {
-//         this.x = x
-//         this.y = y
-//     }
-// }
-
-
-// // 经纬度
-// export class LngLatPoint {
-//     x: mFloat32
-//     y: mFloat32
-
-//     constructor(x: mFloat32, y: mFloat32) {
-//         this.x = x
-//         this.y = y
-//     }
-// }
+    constructor(mapX: LngOrLat, mapY: LngOrLat) {
+        this.mapX = mapX
+        this.mapY = mapY
+    }
+}
