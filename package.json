@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --require ts-node/register test/index.test.ts",
-    "benchmark": "webpack-dev-server --config benchmark/ts/webpack.config.js",
-    "asbuildxxx": "asc src/index.ts -b dist/untouched.wasm -t dist/untouched.wat --validate --sourceMap --debug",
-    "asbuild": "gulp --gulpfile build/gulpfile.ts --cwd ./"
+    "asbuild": "gulp --gulpfile build/gulpfile.ts --cwd ./",
+    "benchmark": "ts-node benchmark/index.ts",
+    "benchmarkxxx": "webpack-dev-server --config benchmark/ts/webpack.config.js",
+    "asbuildxxx": "asc src/index.ts -b dist/untouched.wasm -t dist/untouched.wat --validate --sourceMap --debug"
   },
   "repository": {
     "type": "git",

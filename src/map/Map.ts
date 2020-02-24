@@ -6,10 +6,6 @@ import { lngLatToPoint } from './SphericalMercator'
 import { LngLatPoint, LngOrLat, Point } from '../Basic'
 import { mFloat32, mInt32, mFloat64 } from '../Raw'
 
-// declare function idof<T>(): mInt32
-
-// export const UINT32_ARRAY = idof<Array<mInt32>>()
-
 export class Map {
     private _quadTree: QuadTree | null = null
     private _list: PointItem[] = []

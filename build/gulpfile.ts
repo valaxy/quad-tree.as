@@ -24,7 +24,7 @@ function copyRawTs() {
 }
 
 const build = shell.task(
-    'cd dist/build && ..\\..\\node_modules\\.bin\\asc src/index.ts -b ../production.wasm --validate', {
+    'cd dist/build && ..\\..\\node_modules\\.bin\\asc src/index.ts -O3 -b ../production.wasm --validate', {
     verbose: true
 })
 

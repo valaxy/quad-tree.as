@@ -25,7 +25,7 @@ class Node {
     private _bounds: BoundsItem
     private _depth: mUint8
     private _subNodes: Node[] = []
-    private _children: PointItem[] = []
+    private _children: PointItem[] = [] // 所有的点
 
     private _descendantsNum: mInt32 = -1 // 会缓存？
 
@@ -163,6 +163,7 @@ class Node {
         let b_h_h = this._bounds.height / 2
         let bx_b_w_h = bx + b_w_h
         let by_b_h_h = by + b_h_h
+        this._subNodes = new Array<Node>(4)
         this._subNodes[Node.TOP_LEFT] = new Node(new BoundsItem(bx, by, b_w_h, b_h_h), depth)
         this._subNodes[Node.TOP_RIGHT] = new Node(new BoundsItem(bx_b_w_h, by, b_w_h, b_h_h), depth)
         this._subNodes[Node.BOTTOM_LEFT] = new Node(new BoundsItem(bx, by_b_h_h, b_w_h, b_h_h), depth)

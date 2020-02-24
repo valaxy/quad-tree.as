@@ -10,6 +10,7 @@ export type mUint8 = u8
 export const mMaxFloat32 = f32.MAX_VALUE
 export const mMaxUint32 = u32.MAX_VALUE
 export const mMinUint32 = u32.MIN_VALUE
+export const UINT32_ARRAY = idof<Array<mInt32>>()
 
 
 
