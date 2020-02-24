@@ -5,10 +5,6 @@
     "strict": true
   },
   "include": [
-    "./src/**/*.ts"
-  ],
-  "exclude": [
-    "./backup/**/*.ts",
-    "./build/**/*.ts"
+    "../src/**/*.ts"
   ]
 }

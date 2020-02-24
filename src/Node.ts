@@ -52,6 +52,7 @@ class Node {
         let stack: Node[] = [this]
         do {
             let node = stack.pop()
+            if (!node) { throw new Error('fuck ts compiler') }
             let subNodes = node.subNodes
             if (subNodes.length) {
                 for (let i = 0; i < subNodes.length; i++) {

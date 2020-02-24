@@ -12,9 +12,18 @@ export class MapPoint {
 
 export class AggrRoot {
     points: MapPoint[]
+
+    constructor(points: MapPoint[]) {
+        this.points = points
+    }
 }
 
 export class AggrDesc {
     data: mFloat32[] // TODO 需要支持整数
     groupFunc: string // 'max' | 'min' | 'sum' | 'count'
+
+    constructor(data: mFloat32[], groupFunc: string) {
+        this.data = data
+        this.groupFunc = groupFunc
+    }
 }

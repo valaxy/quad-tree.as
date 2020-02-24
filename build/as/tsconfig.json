@@ -1,0 +1,7 @@
+{
+  "_desc": "这个文件需要copy到dist/build目录发挥作用",
+  "extends": "../../node_modules/assemblyscript/std/assembly.json",
+  "include": [
+    "./src/**/*.ts"
+  ]
+}

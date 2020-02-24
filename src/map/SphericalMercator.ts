@@ -12,8 +12,9 @@ const MAX_LEVEL = 32
 const scales: mInt32[] = new Array(MAX_LEVEL)
 
 function _initScale(): void {
-    for (let level = 0; level < MAX_LEVEL; level++) {
-        scales[level] = 256 * Math.pow(2, level) as mInt32 // TODO
+    scales[0] = 256
+    for (let level = 1; level < MAX_LEVEL; level++) {
+        scales[level] = 2 * scales[level - 1]
     }
 }
 
