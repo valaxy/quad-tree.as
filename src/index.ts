@@ -12,3 +12,5 @@ export { SphericalMercator }
 export * from './map/Map'
 export * from './map/AreaForRender'
 export * from './map/PointForRender'
+export * from './map/Selection'
+export * from './map/quickselect'
