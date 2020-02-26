@@ -10,3 +10,5 @@ export * from './aggr/AggrDesc'
 import * as SphericalMercator from './map/SphericalMercator'
 export { SphericalMercator }
 export * from './map/Map'
+export * from './map/AreaForRender'
+export * from './map/PointForRender'
