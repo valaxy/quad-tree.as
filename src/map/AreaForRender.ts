@@ -3,10 +3,10 @@ import { BoundsItem } from '../BoundsItem'
 export class AreaForRender {
     bounds: BoundsItem
     score: number // 这个分数是在同层级的
-    featureValue: any
+    featureValue: number[]
     aggrValue: number
 
-    constructor(bounds: BoundsItem, score: number, featureValue: any, aggrValue: number) {
+    constructor(bounds: BoundsItem, score: number, featureValue: number[], aggrValue: number) {
         this.bounds = bounds
         this.score = score
         this.featureValue = featureValue
